@@ -7,6 +7,8 @@
     <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>mirrormocks</name>
+    <description>Set of mock classes for javax.lang.model interfaces. For use in unit testing annotation processors.</description>
+    <url>https://github.com/diosmosis/java-mirror-mocks</url>
 
     <dependencies>
         <dependency>
