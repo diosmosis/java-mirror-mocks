@@ -18,19 +18,11 @@ public class AnnotationElement implements AnnotationMirror {
 
     private Annotation annotation;
     private Class<? extends Annotation> annotationClass;
-    private Map<ExecutableElement, AnnotationValue> elementValues = new HashMap<ExecutableElement, AnnotationValue>();
+    private Map<ExecutableElement, AnnotationValue> elementValues = null;
 
     public AnnotationElement(Annotation annotation, Class<? extends Annotation> annotationClass) {
         this.annotation = annotation;
         this.annotationClass = annotationClass;
-
-        ClassElement annotationClassElement = ElementFactory.make(annotationClass);
-        for (Method method : annotationClass.getDeclaredMethods()) {
-            ExecutableElement methodElement = ElementFactory.make(method, annotationClassElement);
-            AnnotationValue annotationValue = new AnnotationValueImpl(method.getDefaultValue());
-
-            elementValues.put(methodElement, annotationValue);
-        }
     }
 
     @Override
@@ -40,6 +32,17 @@ public class AnnotationElement implements AnnotationMirror {
 
     @Override
     public Map<ExecutableElement, AnnotationValue> getElementValues() {
+        if (elementValues == null) {
+            elementValues = new HashMap<ExecutableElement, AnnotationValue>();
+
+            ClassElement annotationClassElement = ElementFactory.make(annotationClass);
+            for (Method method : annotationClass.getDeclaredMethods()) {
+                ExecutableElement methodElement = ElementFactory.make(method, annotationClassElement);
+                AnnotationValue annotationValue = new AnnotationValueImpl(method.getDefaultValue());
+
+                elementValues.put(methodElement, annotationValue);
+            }
+        }
         return elementValues;
     }
 

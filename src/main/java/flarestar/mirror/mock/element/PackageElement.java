@@ -20,7 +20,7 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
     private Package thePackage;
 
     // TODO: redundancy w/ ClassElement (there should be an AnnotatedElement common base)
-    private List<AnnotationMirror> annotationMirrors = new ArrayList<AnnotationMirror>();
+    private List<AnnotationMirror> annotationMirrors = null;
     private List<Element> enclosedElements = null;
 
     private Name qualifiedName;
@@ -31,10 +31,6 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
 
         qualifiedName = new Name(thePackage.getName());
         simpleName = new Name(getSimpleNameOf(thePackage));
-
-        for (Annotation annotation : thePackage.getAnnotations()) {
-            this.annotationMirrors.add(ElementFactory.make(annotation, this));
-        }
     }
 
     @Override
@@ -54,6 +50,12 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
 
     @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
+        if (annotationMirrors == null) {
+            annotationMirrors = new ArrayList<AnnotationMirror>();
+            for (Annotation annotation : thePackage.getAnnotations()) {
+                this.annotationMirrors.add(ElementFactory.make(annotation, this));
+            }
+        }
         return annotationMirrors;
     }
 

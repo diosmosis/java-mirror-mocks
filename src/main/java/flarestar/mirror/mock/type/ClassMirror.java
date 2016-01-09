@@ -15,14 +15,10 @@ import java.util.List;
  */
 public class ClassMirror implements DeclaredType {
     private TypeElement element;
-    private List<TypeMirror> typeParameters = new ArrayList<TypeMirror>();
+    private List<TypeMirror> typeParameters = null;
 
     public ClassMirror(TypeElement element) {
         this.element = element;
-
-        for (TypeParameterElement argument : element.getTypeParameters()) {
-            typeParameters.add(argument.asType());
-        }
     }
 
     @Override
@@ -37,6 +33,12 @@ public class ClassMirror implements DeclaredType {
 
     @Override
     public List<? extends TypeMirror> getTypeArguments() {
+        if (typeParameters == null) {
+            typeParameters = new ArrayList<TypeMirror>();
+            for (TypeParameterElement argument : element.getTypeParameters()) {
+                typeParameters.add(argument.asType());
+            }
+        }
         return typeParameters;
     }
 

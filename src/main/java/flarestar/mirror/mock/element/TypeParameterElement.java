@@ -19,16 +19,12 @@ public class TypeParameterElement implements javax.lang.model.element.TypeParame
 
     private TypeVariable typeVariable;
     private Element genericElement;
-    private List<TypeMirror> bounds = new ArrayList<TypeMirror>();
+    private List<TypeMirror> bounds = null;
     private Name simpleName;
 
     public TypeParameterElement(TypeVariable typeVariable, Element genericElement) {
         this.typeVariable = typeVariable;
         this.genericElement = genericElement;
-
-        for (Type bound : typeVariable.getBounds()) {
-            bounds.add(TypeMirrorFactory.make(bound, genericElement));
-        }
 
         simpleName = new Name(typeVariable.getName());
     }
@@ -40,6 +36,12 @@ public class TypeParameterElement implements javax.lang.model.element.TypeParame
 
     @Override
     public List<? extends TypeMirror> getBounds() {
+        if (bounds == null) {
+            bounds = new ArrayList<TypeMirror>();
+            for (Type bound : typeVariable.getBounds()) {
+                bounds.add(TypeMirrorFactory.make(bound, genericElement));
+            }
+        }
         return bounds;
     }
 

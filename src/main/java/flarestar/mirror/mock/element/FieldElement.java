@@ -18,7 +18,7 @@ public class FieldElement implements VariableElement {
 
     private Field field;
     private ClassElement enclosingElement;
-    private List<AnnotationMirror> annotations = new ArrayList<AnnotationMirror>();
+    private List<AnnotationMirror> annotations = null;
 
     private Set<Modifier> modifiers = new HashSet<Modifier>();
 
@@ -27,10 +27,6 @@ public class FieldElement implements VariableElement {
     public FieldElement(Field field, ClassElement enclosingElement) {
         this.field = field;
         this.enclosingElement = enclosingElement;
-
-        for (Annotation annotation : field.getAnnotations()) {
-            annotations.add(ElementFactory.make(annotation, this));
-        }
 
         modifiers = ElementModifiers.getModifiers(field.getModifiers());
 
@@ -54,6 +50,12 @@ public class FieldElement implements VariableElement {
 
     @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
+        if (annotations == null) {
+            annotations = new ArrayList<AnnotationMirror>();
+            for (Annotation annotation : field.getAnnotations()) {
+                annotations.add(ElementFactory.make(annotation, this));
+            }
+        }
         return annotations;
     }
 

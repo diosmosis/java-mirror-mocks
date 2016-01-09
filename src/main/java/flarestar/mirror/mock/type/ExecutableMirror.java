@@ -11,23 +11,21 @@ import java.util.List;
 public class ExecutableMirror implements ExecutableType {
 
     private ExecutableElement element;
-    private List<TypeVariable> typeParameters = new ArrayList<TypeVariable>();
-    private List<TypeMirror> parameters = new ArrayList<TypeMirror>();
+    private List<TypeVariable> typeParameters = null;
+    private List<TypeMirror> parameters = null;
 
     public ExecutableMirror(ExecutableElement element) {
         this.element = element;
-
-        for (TypeParameterElement typeParameter : element.getTypeParameters()) {
-            typeParameters.add((TypeVariable)typeParameter.asType());
-        }
-
-        for (VariableElement parameter : element.getParameters()) {
-            parameters.add(parameter.asType());
-        }
     }
 
     @Override
     public List<? extends TypeVariable> getTypeVariables() {
+        if (typeParameters == null) {
+            typeParameters = new ArrayList<TypeVariable>();
+            for (TypeParameterElement typeParameter : element.getTypeParameters()) {
+                typeParameters.add((TypeVariable)typeParameter.asType());
+            }
+        }
         return typeParameters;
     }
 
@@ -38,6 +36,12 @@ public class ExecutableMirror implements ExecutableType {
 
     @Override
     public List<? extends TypeMirror> getParameterTypes() {
+        if (parameters == null) {
+            parameters = new ArrayList<TypeMirror>();
+            for (VariableElement parameter : element.getParameters()) {
+                parameters.add(parameter.asType());
+            }
+        }
         return parameters;
     }
 

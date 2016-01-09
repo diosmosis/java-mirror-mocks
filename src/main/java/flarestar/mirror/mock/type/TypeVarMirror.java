@@ -11,12 +11,13 @@ import javax.lang.model.type.TypeVisitor;
  * TODO
  */
 public class TypeVarMirror implements TypeVariable {
+    private java.lang.reflect.TypeVariable<?> typeVariable;
     private TypeParameterElement element;
-    private TypeMirror upperBounds;
+    private TypeMirror upperBounds = null;
 
     public TypeVarMirror(java.lang.reflect.TypeVariable<?> typeVariable, TypeParameterElement element) {
+        this.typeVariable = typeVariable;
         this.element = element;
-        this.upperBounds = TypeMirrorFactory.makeIntersected(typeVariable.getBounds(), element);
     }
 
     @Override
@@ -26,6 +27,9 @@ public class TypeVarMirror implements TypeVariable {
 
     @Override
     public TypeMirror getUpperBound() {
+        if (upperBounds == null) {
+            this.upperBounds = TypeMirrorFactory.makeIntersected(typeVariable.getBounds(), element);
+        }
         return upperBounds;
     }
 

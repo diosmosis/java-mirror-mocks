@@ -16,7 +16,7 @@ import java.util.Set;
 public class ParameterElement implements VariableElement {
     private Class<?> parameterType;
     private MethodElement enclosingElement;
-    private List<AnnotationElement> annotationMirrors = new ArrayList<AnnotationElement>();
+    private List<AnnotationElement> annotationMirrors = null;
     private Name simpleName;
 
     public ParameterElement(Class<?> parameterType, int argIndex, MethodElement enclosingElement) {
@@ -24,10 +24,6 @@ public class ParameterElement implements VariableElement {
         this.enclosingElement = enclosingElement;
 
         this.simpleName = new Name("arg" + argIndex);
-
-        for (Annotation annotation : enclosingElement.getMethod().getAnnotations()) {
-            this.annotationMirrors.add(ElementFactory.make(annotation, this));
-        }
     }
 
     @Override
@@ -47,11 +43,19 @@ public class ParameterElement implements VariableElement {
 
     @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
+        if (annotationMirrors == null) {
+            annotationMirrors = new ArrayList<AnnotationElement>();
+            for (Annotation annotation : enclosingElement.getMethod().getAnnotations()) {
+                this.annotationMirrors.add(ElementFactory.make(annotation, this));
+            }
+        }
         return annotationMirrors;
     }
 
     @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
+        getAnnotationMirrors(); // make sure the list is initialized
+
         for (AnnotationElement mirror : annotationMirrors) {
             if (aClass.isInstance(mirror.getAnnotation())) {
                 return (A)mirror.getAnnotation();

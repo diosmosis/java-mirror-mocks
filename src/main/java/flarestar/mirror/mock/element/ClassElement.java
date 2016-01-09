@@ -18,12 +18,10 @@ import java.util.Set;
 public class ClassElement implements TypeElement {
 
     private Class<?> klass;
-    private TypeMirror typeMirror;
-    private List<Element> enclosedElements = new ArrayList<Element>();
-    private List<AnnotationMirror> annotationMirrors = new ArrayList<AnnotationMirror>();
-    private List<TypeParameterElement> typeParameterElements = new ArrayList<TypeParameterElement>();
-    private List<TypeMirror> interfaces = new ArrayList<TypeMirror>();
-    private TypeMirror extendedType;
+    private List<Element> enclosedElements = null;
+    private List<AnnotationMirror> annotationMirrors = null;
+    private List<TypeParameterElement> typeParameterElements = null;
+    private List<TypeMirror> interfaces = null;
 
     private Name qualifiedName;
     private Name simpleName;
@@ -32,33 +30,6 @@ public class ClassElement implements TypeElement {
 
     public ClassElement(Class<?> klass) {
         this.klass = klass;
-        this.typeMirror = TypeMirrorFactory.make(klass);
-
-        for (Class<?> innerClass : klass.getDeclaredClasses()) {
-            this.enclosedElements.add(new ClassElement(innerClass));
-        }
-
-        for (Field field : klass.getDeclaredFields()) {
-            this.enclosedElements.add(ElementFactory.make(field, this));
-        }
-
-        for (Method method : klass.getDeclaredMethods()) {
-            this.enclosedElements.add(ElementFactory.make(method, this));
-        }
-
-        for (Annotation annotation : klass.getAnnotations()) {
-            this.annotationMirrors.add(ElementFactory.make(annotation, this));
-        }
-
-        for (TypeVariable element : klass.getTypeParameters()) {
-            this.typeParameterElements.add(ElementFactory.make(element, this));
-        }
-
-        for (Class<?> klassInterface : klass.getInterfaces()) {
-            this.interfaces.add(TypeMirrorFactory.make(klassInterface));
-        }
-
-        this.extendedType = TypeMirrorFactory.make(klass.getSuperclass());
 
         qualifiedName = new Name(klass.getName());
         simpleName = new Name(klass.getSimpleName());
@@ -68,6 +39,21 @@ public class ClassElement implements TypeElement {
 
     @Override
     public List<? extends Element> getEnclosedElements() {
+        if (enclosedElements == null) {
+            this.enclosedElements = new ArrayList<Element>();
+
+            for (Class<?> innerClass : klass.getDeclaredClasses()) {
+                this.enclosedElements.add(ElementFactory.make(innerClass));
+            }
+
+            for (Field field : klass.getDeclaredFields()) {
+                this.enclosedElements.add(ElementFactory.make(field, this));
+            }
+
+            for (Method method : klass.getDeclaredMethods()) {
+                this.enclosedElements.add(ElementFactory.make(method, this));
+            }
+        }
         return enclosedElements;
     }
 
@@ -96,7 +82,7 @@ public class ClassElement implements TypeElement {
 
     @Override
     public TypeMirror asType() {
-        return typeMirror;
+        return TypeMirrorFactory.make(klass);
     }
 
     @Override
@@ -114,6 +100,14 @@ public class ClassElement implements TypeElement {
 
     @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
+        if (annotationMirrors == null) {
+            this.annotationMirrors = new ArrayList<AnnotationMirror>();
+            for (Annotation annotation : klass.getAnnotations()) {
+                this.annotationMirrors.add(ElementFactory.make(annotation, this));
+            }
+
+        }
+
         return annotationMirrors;
     }
 
@@ -134,16 +128,28 @@ public class ClassElement implements TypeElement {
 
     @Override
     public TypeMirror getSuperclass() {
-        return extendedType;
+        return TypeMirrorFactory.make(klass.getSuperclass());
     }
 
     @Override
     public List<? extends TypeMirror> getInterfaces() {
+        if (interfaces == null) {
+            this.interfaces = new ArrayList<TypeMirror>();
+            for (Class<?> klassInterface : klass.getInterfaces()) {
+                this.interfaces.add(TypeMirrorFactory.make(klassInterface));
+            }
+        }
         return interfaces;
     }
 
     @Override
     public List<? extends TypeParameterElement> getTypeParameters() {
+        if (typeParameterElements == null) {
+            typeParameterElements = new ArrayList<TypeParameterElement>();
+            for (TypeVariable element : klass.getTypeParameters()) {
+                this.typeParameterElements.add(ElementFactory.make(element, this));
+            }
+        }
         return typeParameterElements;
     }
 
