@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'org.reflections:reflections:0.9.10'
+
+    testCompile 'junit:junit:4.12'
+}
