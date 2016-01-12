@@ -20,12 +20,10 @@ public class TypeVarMirror implements TypeVariable {
         this.element = element;
     }
 
-    @Override
     public Element asElement() {
         return element;
     }
 
-    @Override
     public TypeMirror getUpperBound() {
         if (upperBounds == null) {
             this.upperBounds = TypeMirrorFactory.makeIntersected(typeVariable.getBounds(), element);
@@ -33,17 +31,14 @@ public class TypeVarMirror implements TypeVariable {
         return upperBounds;
     }
 
-    @Override
     public TypeMirror getLowerBound() {
         return TypeMirrorFactory.NULL;
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.TYPEVAR;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitTypeVariable(this, p);
     }

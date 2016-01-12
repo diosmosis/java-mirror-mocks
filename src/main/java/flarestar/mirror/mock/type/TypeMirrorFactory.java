@@ -5,6 +5,8 @@ import flarestar.mirror.mock.element.PackageElement;
 import flarestar.mirror.mock.element.TypeParameterElement;
 
 import javax.lang.model.element.*;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -17,8 +19,10 @@ import java.util.Map;
  */
 public class TypeMirrorFactory {
     public static final TypeMirror NULL = new NullMirror();
+    public static final TypeMirror NO_TYPE = new NoTypeMirror();
 
     private static final Map<Object, TypeMirror> typeMirrorCache = new HashMap<Object, TypeMirror>();
+    private static final Map<TypeKind, PrimitiveType> primitiveTypeKindMapping = new HashMap<TypeKind, PrimitiveType>();
 
     static {
         typeMirrorCache.put(null, NULL);
@@ -32,6 +36,15 @@ public class TypeMirrorFactory {
         typeMirrorCache.put(Float.class, new PrimitiveMirror(Float.class));
         typeMirrorCache.put(Double.class, new PrimitiveMirror(Double.class));
         typeMirrorCache.put(Void.class, new PrimitiveMirror(Void.class)); // TODO: void should not be a primitive
+
+        primitiveTypeKindMapping.put(TypeKind.BOOLEAN, (PrimitiveType)typeMirrorCache.get(Boolean.class));
+        primitiveTypeKindMapping.put(TypeKind.BYTE, (PrimitiveType)typeMirrorCache.get(Byte.class));
+        primitiveTypeKindMapping.put(TypeKind.SHORT, (PrimitiveType)typeMirrorCache.get(Short.class));
+        primitiveTypeKindMapping.put(TypeKind.INT, (PrimitiveType)typeMirrorCache.get(Integer.class));
+        primitiveTypeKindMapping.put(TypeKind.LONG, (PrimitiveType)typeMirrorCache.get(Long.class));
+        primitiveTypeKindMapping.put(TypeKind.CHAR, (PrimitiveType)typeMirrorCache.get(Character.class));
+        primitiveTypeKindMapping.put(TypeKind.FLOAT, (PrimitiveType)typeMirrorCache.get(Float.class));
+        primitiveTypeKindMapping.put(TypeKind.DOUBLE, (PrimitiveType)typeMirrorCache.get(Double.class));
     }
 
     public static TypeMirror make(Class<?> klass) {
@@ -41,11 +54,10 @@ public class TypeMirrorFactory {
 
         TypeMirror result;
 
-        // we have to handle arrays & ClassMirrors for whatever else
+        ClassElement element = ElementFactory.make(klass);
         if (klass.isArray()) {
             result = new ArrayMirror(klass);
         } else {
-            ClassElement element = ElementFactory.make(klass);
             result = new ClassMirror(element);
         }
 
@@ -128,5 +140,9 @@ public class TypeMirrorFactory {
         typeMirrorCache.put(methodElement, mirror);
 
         return mirror;
+    }
+
+    public static PrimitiveType makePrimitive(TypeKind typeKind) {
+        return primitiveTypeKindMapping.get(typeKind);
     }
 }

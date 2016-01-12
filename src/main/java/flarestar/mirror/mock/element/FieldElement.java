@@ -33,22 +33,18 @@ public class FieldElement implements VariableElement {
         simpleName = new Name(field.getName());
     }
 
-    @Override
     public Object getConstantValue() {
         return null; // TODO: we can't get this from reflection
     }
 
-    @Override
     public TypeMirror asType() {
         return TypeMirrorFactory.make(field.getType());
     }
 
-    @Override
     public ElementKind getKind() {
         return ElementKind.FIELD;
     }
 
-    @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
         if (annotations == null) {
             annotations = new ArrayList<AnnotationMirror>();
@@ -59,32 +55,26 @@ public class FieldElement implements VariableElement {
         return annotations;
     }
 
-    @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
         return field.getAnnotation(aClass);
     }
 
-    @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
     public Name getSimpleName() {
         return simpleName;
     }
 
-    @Override
     public Element getEnclosingElement() {
         return enclosingElement;
     }
 
-    @Override
     public List<? extends Element> getEnclosedElements() {
         return new ArrayList<Element>();
     }
 
-    @Override
     public <R, P> R accept(ElementVisitor<R, P> elementVisitor, P p) {
         return elementVisitor.visitVariable(this, p);
     }

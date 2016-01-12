@@ -40,7 +40,6 @@ public class MethodElement implements ExecutableElement {
         simpleName = new Name(method.getName());
     }
 
-    @Override
     public List<? extends TypeParameterElement> getTypeParameters() {
         if (typeParameters == null) {
             typeParameters = new ArrayList<TypeParameterElement>();
@@ -52,12 +51,10 @@ public class MethodElement implements ExecutableElement {
         return typeParameters;
     }
 
-    @Override
     public TypeMirror getReturnType() {
         return TypeMirrorFactory.make(method.getReturnType());
     }
 
-    @Override
     public List<? extends VariableElement> getParameters() {
         if (parameters == null) {
             parameters = new ArrayList<VariableElement>();
@@ -72,12 +69,10 @@ public class MethodElement implements ExecutableElement {
         return parameters;
     }
 
-    @Override
     public boolean isVarArgs() {
         return method.isVarArgs();
     }
 
-    @Override
     public List<? extends TypeMirror> getThrownTypes() {
         if (thrownTypes == null) {
             thrownTypes = new ArrayList<TypeMirror>();
@@ -88,7 +83,6 @@ public class MethodElement implements ExecutableElement {
         return thrownTypes;
     }
 
-    @Override
     public AnnotationValue getDefaultValue() {
         if (defaultValue == null) {
             Object defaultValue = method.getDefaultValue();
@@ -99,17 +93,14 @@ public class MethodElement implements ExecutableElement {
         return defaultValue;
     }
 
-    @Override
     public TypeMirror asType() {
         return TypeMirrorFactory.make(this);
     }
 
-    @Override
     public ElementKind getKind() {
         return ElementKind.METHOD;
     }
 
-    @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
         if (annotationMirrors == null) {
             annotationMirrors = new ArrayList<AnnotationMirror>();
@@ -120,32 +111,26 @@ public class MethodElement implements ExecutableElement {
         return annotationMirrors;
     }
 
-    @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
         return method.getAnnotation(aClass);
     }
 
-    @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
     public Name getSimpleName() {
         return simpleName;
     }
 
-    @Override
     public Element getEnclosingElement() {
         return enclosingElement;
     }
 
-    @Override
     public List<? extends Element> getEnclosedElements() {
         return new ArrayList<Element>(); // TODO: should return local types & such, but don't think it's possible to get them
     }
 
-    @Override
     public <R, P> R accept(ElementVisitor<R, P> elementVisitor, P p) {
         return elementVisitor.visitExecutable(this, p);
     }

@@ -18,7 +18,6 @@ public class ExecutableMirror implements ExecutableType {
         this.element = element;
     }
 
-    @Override
     public List<? extends TypeVariable> getTypeVariables() {
         if (typeParameters == null) {
             typeParameters = new ArrayList<TypeVariable>();
@@ -29,12 +28,10 @@ public class ExecutableMirror implements ExecutableType {
         return typeParameters;
     }
 
-    @Override
     public TypeMirror getReturnType() {
         return element.getReturnType();
     }
 
-    @Override
     public List<? extends TypeMirror> getParameterTypes() {
         if (parameters == null) {
             parameters = new ArrayList<TypeMirror>();
@@ -45,18 +42,19 @@ public class ExecutableMirror implements ExecutableType {
         return parameters;
     }
 
-    @Override
     public List<? extends TypeMirror> getThrownTypes() {
         return element.getThrownTypes();
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.EXECUTABLE;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitExecutable(this, p);
+    }
+
+    public Element asElement() {
+        return element;
     }
 }

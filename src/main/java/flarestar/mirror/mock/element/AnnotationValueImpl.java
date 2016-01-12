@@ -20,12 +20,10 @@ public class AnnotationValueImpl implements AnnotationValue {
         this.value = value;
     }
 
-    @Override
     public Object getValue() {
         return value;
     }
 
-    @Override
     public <R, P> R accept(AnnotationValueVisitor<R, P> annotationValueVisitor, P p) {
         if (value instanceof Boolean) {
             return annotationValueVisitor.visitBoolean((Boolean) value, p);

@@ -33,22 +33,18 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
         simpleName = new Name(getSimpleNameOf(thePackage));
     }
 
-    @Override
     public Name getQualifiedName() {
         return qualifiedName;
     }
 
-    @Override
     public TypeMirror asType() {
         return TypeMirrorFactory.make(this);
     }
 
-    @Override
     public ElementKind getKind() {
         return ElementKind.PACKAGE;
     }
 
-    @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
         if (annotationMirrors == null) {
             annotationMirrors = new ArrayList<AnnotationMirror>();
@@ -59,28 +55,23 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
         return annotationMirrors;
     }
 
-    @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
         return thePackage.getAnnotation(aClass);
     }
 
-    @Override
     public Set<Modifier> getModifiers() {
         // TODO: don't know how to get modifiers for a package...
         return new HashSet<Modifier>();
     }
 
-    @Override
     public Name getSimpleName() {
         return simpleName;
     }
 
-    @Override
     public boolean isUnnamed() {
         return false; // TODO: not sure how to tell if a package is the default one
     }
 
-    @Override
     public Element getEnclosingElement() {
         String parentPackage = getParentPackage();
         if (parentPackage == null) {
@@ -90,7 +81,6 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
         }
     }
 
-    @Override
     public List<? extends Element> getEnclosedElements() {
         if (enclosedElements == null) {
             enclosedElements = ElementFactory.getChildElementsForPackage(this);
@@ -98,7 +88,6 @@ public class PackageElement implements javax.lang.model.element.PackageElement {
         return enclosedElements;
     }
 
-    @Override
     public <R, P> R accept(ElementVisitor<R, P> elementVisitor, P p) {
         return elementVisitor.visitPackage(this, p);
     }

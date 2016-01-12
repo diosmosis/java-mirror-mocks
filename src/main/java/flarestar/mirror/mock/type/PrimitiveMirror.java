@@ -8,14 +8,17 @@ import javax.lang.model.type.TypeVisitor;
 /**
  * TODO
  */
-public class PrimitiveMirror implements PrimitiveType {
+public class PrimitiveMirror implements PrimitiveType, ReflectedClassMirror {
     private Class<?> klass;
+
+    public Class<?> getKlass() {
+        return klass;
+    }
 
     public PrimitiveMirror(Class<?> klass) {
         this.klass = klass;
     }
 
-    @Override
     public TypeKind getKind() {
         if (klass == Boolean.class) {
             return TypeKind.BOOLEAN;
@@ -40,7 +43,6 @@ public class PrimitiveMirror implements PrimitiveType {
         }
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitPrimitive(this, p);
     }

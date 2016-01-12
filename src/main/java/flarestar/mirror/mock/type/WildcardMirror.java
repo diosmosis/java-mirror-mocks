@@ -15,22 +15,18 @@ public class WildcardMirror implements WildcardType {
         this.type = type;
     }
 
-    @Override
     public TypeMirror getExtendsBound() {
         return null; // TODO: unimplemented
     }
 
-    @Override
     public TypeMirror getSuperBound() {
         return null; // TODO: unimplemented
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.WILDCARD;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitWildcard(this, p);
     }

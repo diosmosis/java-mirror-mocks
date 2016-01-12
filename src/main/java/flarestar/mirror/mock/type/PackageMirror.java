@@ -20,12 +20,10 @@ public class PackageMirror implements DeclaredType {
         this.packageElement = packageElement;
     }
 
-    @Override
     public Element asElement() {
         return packageElement;
     }
 
-    @Override
     public TypeMirror getEnclosingType() {
         Element enclosing = packageElement.getEnclosingElement();
         if (enclosing == null) {
@@ -35,17 +33,14 @@ public class PackageMirror implements DeclaredType {
         }
     }
 
-    @Override
     public List<? extends TypeMirror> getTypeArguments() {
         return new ArrayList<TypeMirror>();
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.PACKAGE;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitDeclared(this, p);
     }

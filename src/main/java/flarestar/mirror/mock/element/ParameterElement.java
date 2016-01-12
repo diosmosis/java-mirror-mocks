@@ -26,22 +26,18 @@ public class ParameterElement implements VariableElement {
         this.simpleName = new Name("arg" + argIndex);
     }
 
-    @Override
     public Object getConstantValue() {
         return null; // TODO: this is for default value I think?
     }
 
-    @Override
     public TypeMirror asType() {
         return TypeMirrorFactory.make(parameterType);
     }
 
-    @Override
     public ElementKind getKind() {
         return ElementKind.PARAMETER;
     }
 
-    @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
         if (annotationMirrors == null) {
             annotationMirrors = new ArrayList<AnnotationElement>();
@@ -52,7 +48,6 @@ public class ParameterElement implements VariableElement {
         return annotationMirrors;
     }
 
-    @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
         getAnnotationMirrors(); // make sure the list is initialized
 
@@ -64,27 +59,22 @@ public class ParameterElement implements VariableElement {
         return null;
     }
 
-    @Override
     public Set<Modifier> getModifiers() {
         return new HashSet<Modifier>(); // TODO: can't get modifiers through reflection i think
     }
 
-    @Override
     public Name getSimpleName() {
         return simpleName;
     }
 
-    @Override
     public Element getEnclosingElement() {
         return enclosingElement;
     }
 
-    @Override
     public List<? extends Element> getEnclosedElements() {
         return new ArrayList<Element>();
     }
 
-    @Override
     public <R, P> R accept(ElementVisitor<R, P> elementVisitor, P p) {
         return elementVisitor.visitVariable(this, p);
     }

@@ -1,5 +1,7 @@
 package flarestar.mirror.mock.type;
 
+import flarestar.mirror.mock.element.ClassElement;
+
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
@@ -13,7 +15,7 @@ import java.util.List;
 /**
  * TODO
  */
-public class ClassMirror implements DeclaredType {
+public class ClassMirror implements DeclaredType, ReflectedClassMirror {
     private TypeElement element;
     private List<TypeMirror> typeParameters = null;
 
@@ -21,17 +23,14 @@ public class ClassMirror implements DeclaredType {
         this.element = element;
     }
 
-    @Override
     public Element asElement() {
         return element;
     }
 
-    @Override
     public TypeMirror getEnclosingType() {
         return element.getEnclosingElement().asType();
     }
 
-    @Override
     public List<? extends TypeMirror> getTypeArguments() {
         if (typeParameters == null) {
             typeParameters = new ArrayList<TypeMirror>();
@@ -42,13 +41,19 @@ public class ClassMirror implements DeclaredType {
         return typeParameters;
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.DECLARED;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitDeclared(this, p);
+    }
+
+    public Class<?> getKlass() {
+        if (element instanceof ClassElement) {
+            return ((ClassElement) element).getKlass();
+        } else {
+            return null;
+        }
     }
 }

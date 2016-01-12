@@ -18,17 +18,14 @@ public class UnionMirror implements UnionType {
         this.unionTypes = unionTypes;
     }
 
-    @Override
     public List<? extends TypeMirror> getAlternatives() {
         return unionTypes;
     }
 
-    @Override
     public TypeKind getKind() {
         return TypeKind.UNION;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitUnion(this, p);
     }

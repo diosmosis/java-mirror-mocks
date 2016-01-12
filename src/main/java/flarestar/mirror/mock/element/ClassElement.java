@@ -37,7 +37,6 @@ public class ClassElement implements TypeElement {
         modifiers = ElementModifiers.getModifiers(klass.getModifiers());
     }
 
-    @Override
     public List<? extends Element> getEnclosedElements() {
         if (enclosedElements == null) {
             this.enclosedElements = new ArrayList<Element>();
@@ -57,12 +56,10 @@ public class ClassElement implements TypeElement {
         return enclosedElements;
     }
 
-    @Override
     public <R, P> R accept(ElementVisitor<R, P> elementVisitor, P p) {
         return elementVisitor.visitType(this, p);
     }
 
-    @Override
     public NestingKind getNestingKind() {
         if (klass.isAnonymousClass()) {
             return NestingKind.ANONYMOUS;
@@ -75,17 +72,14 @@ public class ClassElement implements TypeElement {
         }
     }
 
-    @Override
     public Name getQualifiedName() {
         return qualifiedName;
     }
 
-    @Override
     public TypeMirror asType() {
         return TypeMirrorFactory.make(klass);
     }
 
-    @Override
     public ElementKind getKind() {
         if (klass.isEnum()) {
             return ElementKind.ENUM;
@@ -98,7 +92,6 @@ public class ClassElement implements TypeElement {
         }
     }
 
-    @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
         if (annotationMirrors == null) {
             this.annotationMirrors = new ArrayList<AnnotationMirror>();
@@ -111,27 +104,22 @@ public class ClassElement implements TypeElement {
         return annotationMirrors;
     }
 
-    @Override
     public <A extends Annotation> A getAnnotation(Class<A> aClass) {
         return klass.getAnnotation(aClass);
     }
 
-    @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
     public Name getSimpleName() {
         return simpleName;
     }
 
-    @Override
     public TypeMirror getSuperclass() {
         return TypeMirrorFactory.make(klass.getSuperclass());
     }
 
-    @Override
     public List<? extends TypeMirror> getInterfaces() {
         if (interfaces == null) {
             this.interfaces = new ArrayList<TypeMirror>();
@@ -142,7 +130,6 @@ public class ClassElement implements TypeElement {
         return interfaces;
     }
 
-    @Override
     public List<? extends TypeParameterElement> getTypeParameters() {
         if (typeParameterElements == null) {
             typeParameterElements = new ArrayList<TypeParameterElement>();
@@ -153,7 +140,6 @@ public class ClassElement implements TypeElement {
         return typeParameterElements;
     }
 
-    @Override
     public Element getEnclosingElement() {
         Class<?> enclosingClass = klass.getEnclosingClass();
         if (enclosingClass != null) {

@@ -9,12 +9,10 @@ import javax.lang.model.type.TypeVisitor;
  * TODO
  */
 public class NullMirror implements NullType {
-    @Override
     public TypeKind getKind() {
         return TypeKind.NULL;
     }
 
-    @Override
     public <R, P> R accept(TypeVisitor<R, P> typeVisitor, P p) {
         return typeVisitor.visitNull(this, p);
     }
